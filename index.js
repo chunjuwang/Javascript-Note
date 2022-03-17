@@ -1,51 +1,36 @@
-function mergeSort (data) {
-    if (data.length < 2) {
-        return data;
-    }
+Object.keysCustom = function (o) {
+    // Object.getOwnPropertyNames 会忽略 enumerable 的值获取所有的非 Symbol 的自有属性名
+    let names = Object.getOwnPropertyNames(o);
+    let keys = [];
 
-    let middle = Math.floor(data.length / 2);
-    
-    return merge(mergeSort(data.slice(0, middle)), mergeSort(data.slice(middle)));
-}
-
-function merge (left, right) {
-    let merged = [];
-
-    let leftLength = left.length;
-    let rightLength = right.length;
-
-    let leftPointer = 0;
-    let rightPointer = 0;
-
-    while (leftPointer < leftLength && rightPointer < rightLength) {
-        if (left[leftPointer] <= right[rightPointer]) {
-            merged[merged.length] = left[leftPointer++];
-        } else {
-            merged[merged.length] = right[rightPointer++];
+    for (let i = 0; i < names.length; i++) {
+        if (Object.getOwnPropertyDescriptor(o, names[i])['enumerable']) {
+            keys.push(names[i]);
         }
     }
 
-    // 后面两个 while 是处理当左或右序列为空时，而另一个序列不为空的情况
-    // 比如左边已经空了，但是右边里面还有元素，那就把右边的元素一次性推到合并数组中
-    // 以下两个 while 语句可以用很多其他相同功能的语句替代：
-    // merged = merged.concat(left.slice(leftPointer), right.slice(rightPointer));
-    // 或：
-    // merged = [...merged, ...left.slice(leftPointer), ...right.slice(rightPointer)];
-
-    while (left.length > 0 && leftPointer < left.length) {
-        merged[merged.length] = left[leftPointer++];
-    }
-
-    while (right.length > 0 && rightPointer < right.length) {
-        merged[merged.length] = right[rightPointer++];
-    }
-
-    return merged;
+    return keys;
 }
 
-let arr = [5, 9, 1,  18,  4, 66, 1, -88, 0, 55, 45, 77, 3, 9, 11,  7, 11];
+let s = Symbol();
+let o = {
+    foo: 'foo value',
+    bar: 'bar value',
+    [s]: 'Symbol value'
+}
 
-console.log(mergeSort(arr));
-console.log(arr);
+Object.defineProperty(o, 'baz', {
+    value: 'baz value'
+});
+
+for (let key in o) {
+    console.log(key);
+}
+console.log(Object.keysCustom(o));
+
+// for...in... 可以遍历自有属性，不可遍历 Symbol 与 enumable 为 false 的元素
+// in 元素单独使用可以判断自身及原型链上的所有的属性
+// getOwnPropertyNames 可以遍历所有的非 Symbol 属性
+// getOwnPropertySymbols 可以遍历所有的 Symbol 属性
 
 
