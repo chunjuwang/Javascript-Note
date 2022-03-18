@@ -13,23 +13,3 @@ Object.prototype.propertyIsEnumerableCustom = function (prop) {
         return false;
     }
 }
-
-let s = Symbol();
-let o = {
-    info: '123',
-    // [s]: 'symbol',
-    123: 666,
-    // 999: 9
-}
-
-Object.defineProperty(o, 'Symbol()', {
-    value: function(){
-
-    },
-    enumerable: false,
-    configurable: false
-})
-
-console.log(s.toString());
-
-console.log(o.propertyIsEnumerableCustom(s));
