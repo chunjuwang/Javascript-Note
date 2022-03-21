@@ -85,7 +85,3 @@ Array.prototype.keysCustom = function () {
         }
     }
 }
-
-for (let key of [1, 20].keysCustom()) {
-    console.log(key);
-}
